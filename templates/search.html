@@ -1,0 +1,25 @@
+{% extends "wrapper.html" %}
+
+{% block style %}
+{{ super() }}
+
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='search_style.css') }}"
+      />
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='search.js') }}"></script>
+{% endblock %}
+
+{% block contents %}
+<form id="searchform">
+<label>Title <input type="text" id="title" name="title" autofocus /></label>
+<label>Author <input type="text" id="author" name="author" /></label>
+<input type="submit" id="searchbutton" value="Search" />
+</form>
+
+<ol id="results"></ol>
+{% endblock %}

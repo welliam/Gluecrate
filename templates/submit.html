@@ -1,0 +1,22 @@
+{% extends "wrapper.html" %}
+
+{% block style %}
+{{ super() }}
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='submit_style.css') }}"
+      />
+{% endblock %}
+
+
+{% block contents %}
+
+
+<form method="post" action="" id="pasteform">
+  <label>Title <input type="text" name="title" autofocus /></label>
+  <label>Author <input type="text" name="author" /></label>
+  <textarea name="body" id="textbody"></textarea>
+  <input type="submit" value="Create Glue" id="submitform" />
+</form>
+
+{% endblock %}

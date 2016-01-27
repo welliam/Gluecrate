@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>{% block title %} Gluecrate {% endblock %}</title>
+    {% block style %}
+    <link rel="stylesheet"
+          type="text/css"
+          href="{{ url_for('static', filename='wrapper_style.css') }}"
+          />
+    {% endblock %}
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    {% endblock %}
+  </head>
+
+  <body>
+    {% block banner %}
+    <div id="banner">
+      <h1 id="title"><a href="/">Gluecrate</a></h1>
+      <a href = "/search">Search</a>
+    </div>
+    {% endblock %}
+
+    <div id="contents">
+      {% block contents %}{% endblock %}
+    </div>
+  </body>
+</html>

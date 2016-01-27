@@ -1,0 +1,53 @@
+body {
+    font-family: Georgia;
+    margin-top: 10%;
+    background-color: #cbcce7;
+}
+
+#banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 99%;
+    background-color: #545570;
+
+    color: white;
+    padding: 1%;
+}
+
+#banner > h1 {
+    display: inline;
+    margin: 0 10%;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    margin-right: 2%
+}
+
+#contents {
+    margin: 0 5%;
+}
+
+textarea, input {
+    background-color: #cbcce7;
+    font-family: Georgia;
+    font-size: 18px;
+    border-color: #545570;
+}
+
+input[type=submit] {
+    background-color: #545570;
+    color: white;
+}
+
+input[type=text] {
+    border-style: none;
+    border-bottom: solid thin;
+}
+
+textarea {
+    border-style: solid;
+    padding: 1%;
+}

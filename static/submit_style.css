@@ -1,0 +1,24 @@
+#pasteform {
+    width: 50%;
+}
+
+#pasteform > * {
+    margin: 1%;
+}
+
+label {
+    display: block;
+}
+
+#textbody {
+    display: block;
+    width: 500px;
+    height: 300px;
+    margin: 1% 0;
+    resize: vertical;
+    font-size: 15px;
+}
+
+#submitform {
+    /* background: none; */
+}

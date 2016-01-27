@@ -1,0 +1,17 @@
+label {
+    display: block;
+    margin: 1%;
+}
+
+#results {
+    margin: 5%;
+}
+
+li > a {
+    color: black;
+    text-decoration: underline;
+}
+
+li > a:hover {
+    text-decoration: none;
+}

@@ -1,0 +1,26 @@
+{% extends "wrapper.html" %}
+
+{% block style %}
+{{ super() }}
+
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='paste_style.css') }}"
+      />
+{% endblock %}
+
+{% block contents %}
+{% if title %}
+<h1>{{ title }}</h1>
+{% endif %}
+
+{% if author %}
+<h2>{{ author }}</h2>
+{% endif %}
+
+{{ time }}
+
+<div id="body">
+  <pre>{{ body }}</pre>
+</div>
+{% endblock %}
