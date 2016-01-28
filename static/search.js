@@ -41,15 +41,19 @@
         return s.length > 0 && escape_tags(s)
     }
 
+    function form_searcher(formid, jsonurl, get_data) {
+        $(formid).submit(function (event) {
+            $.getJSON(jsonurl, get_data(), add_matches)
+            event.preventDefault()
+        })
+    }
+
     $(document).ready(function() {
-        $('#searchform').submit(function (event) {
-            $.getJSON('/_do_search', {
+        form_searcher('#searchform', '/_do_search', function () {
+            return {
                 title: $('input[name="title"]').val(),
                 author: $('input[name="author"]').val()
-            }, add_matches)
-            event.preventDefault()
-            // $.put({author: author}
+            }
         })
-    });
-
-})();
+    })
+})()
