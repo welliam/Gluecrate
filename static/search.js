@@ -1,7 +1,7 @@
 (function() {
 
     function add_matches(matches) {
-        matches = matches['items']
+        matches = matches['matches']
         resultslist = $("#results").text("")
         if (matches.length == 0) {
             resultslist.append("No results!");

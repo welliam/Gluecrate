@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 def get_db():
     if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = sqlite3.connect("pastes.db")
+        g.sqlite_db = sqlite3.connect('pastes.db')
     return g.sqlite_db
 
 
@@ -34,7 +34,7 @@ def write_paste(title, author, body):
     id = str(c.execute('select last_insert_rowid() from pastes').fetchone()[0])
     conn.commit()
     with open(format_paste_filename(id), 'w') as f:
-        f.write(body)
+        f.write(body.encode('utf-8'))
     return id
 
 
@@ -43,7 +43,7 @@ Paste = namedtuple('Paste', 'id title author inserted_at body')
 
 def read_paste(id):
     with open(format_paste_filename(id)) as f:
-        body = f.read()
+        body = unicode(f.read(), 'utf-8')
 
     title, author, inserted_at = get_db().cursor().execute(
         'select title, author, inserted_at from pastes where id = ?',
@@ -58,15 +58,14 @@ def lookup_forms(*names):
 
 
 def format_time(s):
-    # return time.strftime("%d %b %Y %H:%M:%S", time.localtime(s))
-    return time.strftime("%x %X", time.localtime(s))
+    return time.strftime('%x %X', time.localtime(s))
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     if request.method == 'POST':
         title, author, body = lookup_forms('title', 'author', 'body')
-        return redirect("/pastes/" + write_paste(title, author, body))
+        return redirect('/pastes/' + write_paste(title, author, body))
     else:
         return render_template('submit.html')
 
@@ -84,7 +83,7 @@ def search():
     pastes = get_db().cursor().execute(
         'select id, title, author, inserted_at from pastes'
     ).fetchall()
-    return jsonify(dict(items=list(do_search(title, author, pastes))))
+    return jsonify(dict(matches=list(do_search(title, author, pastes))))
 
 
 def do_search(title, author, pastes):
