@@ -46,9 +46,11 @@ def sorted_pastes(pastes):
                   pastes)
 
 
-def read_paste(id):
-    with open(format_paste_filename(id)) as f:
-        body = unicode(f.read(), 'utf-8')
+def read_paste(id, read_body=True):
+    body = None
+    if read_body:
+        with open(format_paste_filename(id)) as f:
+            body = unicode(f.read(), 'utf-8')
 
     title, author, inserted_at, edited_from = get_db().cursor().execute(
         '''
@@ -59,8 +61,9 @@ def read_paste(id):
                  edited_from=edited_from, body=body)
 
 
-def read_all_pastes():
-    return (read_paste(int(id)) for id in os.listdir('pastes'))
+def read_all_pastes(read_body=False):
+    return (read_paste(int(id), read_body=read_body)
+            for id in os.listdir('pastes'))
 
 
 def lookup_forms(*names):
@@ -175,26 +178,18 @@ def family(id):
     return render_template('family.html', family=familyToDict(family))
 
 
-def find_children(pastes_list, id):
-    res = []
-    for p in pastes_list:
-        if (p.edited_from == id):
-            res.append(p)
-    return res
-
-
-def find_family(pastes_list, id):
+def find_family(glues_list, id):
     # optimize me? this is weird
-    pastes = {p.id: p for p in pastes_list}
+    glues = {p.id: p for p in glues_list}
     og = id  # OG stands for Original Glue
-    while pastes[og].edited_from:
-        og = int(pastes[id].edited_from)
+    while glues[og].edited_from:
+        og = glues[id].edited_from
 
     def recur(id):
-        return Family(pastes[id],
-                      map(lambda p: recur(p.id),
-                          find_children(pastes_list, id)))
-    return recur(id)
+        return Family(glues[id],
+                      (recur(p.id) for p in glues_list
+                       if p.edited_from == id))
+    return recur(og)
 
 
 if __name__ == '__main__':
