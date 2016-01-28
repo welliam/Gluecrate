@@ -1,0 +1,16 @@
+{% extends "wrapper.html" %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='family.js') }}"></script>
+<script type="text/javascript">
+  $(function () {
+      Family.render_to_contents({{ family|tojson }})
+  })
+</script>
+{% endblock %}
+
+{% block contents %}
+<list id="results">
+</list>
+{% endblock %}

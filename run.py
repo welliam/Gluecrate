@@ -21,7 +21,7 @@ def close(e):
 
 
 def format_paste_filename(id):
-    return os.path.join(app.root_path, 'pastes', id)
+    return os.path.join(app.root_path, 'pastes', str(id))
 
 
 def write_paste(title, author, body, edit_id):
@@ -31,7 +31,7 @@ def write_paste(title, author, body, edit_id):
     c.execute('''insert into pastes(title, author, inserted_at, edited_from)
     values (?, ?, ?, ?); ''',
               (title, author, int(time.time()), edit_id))
-    id = str(c.execute('select last_insert_rowid() from pastes').fetchone()[0])
+    id = c.execute('select last_insert_rowid() from pastes').fetchone()[0]
     conn.commit()
     with open(format_paste_filename(id), 'w') as f:
         f.write(body.encode('utf-8'))
@@ -39,6 +39,11 @@ def write_paste(title, author, body, edit_id):
 
 
 Paste = namedtuple('Paste', 'id title author inserted_at body edited_from')
+
+
+def sorted_pastes(pastes):
+    return sorted(lambda a, b: -1 if a.id < b.id else 0 if a.id == b.id else 1,
+                  pastes)
 
 
 def read_paste(id):
@@ -54,6 +59,10 @@ def read_paste(id):
                  edited_from=edited_from, body=body)
 
 
+def read_all_pastes():
+    return (read_paste(int(id)) for id in os.listdir('pastes'))
+
+
 def lookup_forms(*names):
     return tuple(map(lambda name: request.form[name].strip(), names))
 
@@ -65,7 +74,8 @@ def format_time(s):
 def submit_page(edit_id=None):
     if request.method == 'POST':
         title, author, body = lookup_forms('title', 'author', 'body')
-        return redirect('/pastes/' + write_paste(title, author, body, edit_id))
+        return redirect('/pastes/' +
+                        str(write_paste(title, author, body, edit_id)))
     else:
         paste = None
         if edit_id:
@@ -132,6 +142,59 @@ def paste_page(id):
                                id=id)
     except IOError:
         return render_template('paste_not_found.html')
+
+
+Family = namedtuple('Family', 'paste children')
+
+
+def familyToDict(f):
+    return dict(
+        paste=pasteToDict(f.paste),
+        children=map(familyToDict, f.children)
+    )
+
+
+def pasteToDict(p):
+    return dict(
+        id=p.id,
+        title=p.title,
+        author=p.author,
+        inserted_at=p.inserted_at,
+        body=p.body,
+        edited_from=p.edited_from
+    )
+
+
+@app.route('/family/<id>')
+def family(id):
+    try:
+        id = int(id)
+    except (ValueError, IOError):
+        return render_template('paste_not_found.html')
+    family = find_family(list(read_all_pastes()), id)
+    return render_template('family.html', family=familyToDict(family))
+
+
+def find_children(pastes_list, id):
+    res = []
+    for p in pastes_list:
+        if (p.edited_from == id):
+            res.append(p)
+    return res
+
+
+def find_family(pastes_list, id):
+    # optimize me? this is weird
+    pastes = {p.id: p for p in pastes_list}
+    og = id  # OG stands for Original Glue
+    while pastes[og].edited_from:
+        og = int(pastes[id].edited_from)
+
+    def recur(id):
+        return Family(pastes[id],
+                      map(lambda p: recur(p.id),
+                          find_children(pastes_list, id)))
+    return recur(id)
 
 
 if __name__ == '__main__':

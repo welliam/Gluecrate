@@ -1,5 +1,4 @@
 (function() {
-
     function add_matches(matches) {
         matches = matches['matches']
         resultslist = $("#results").text("")
@@ -14,14 +13,7 @@
                 time = e['inserted_at']
                 id = e['id']
 
-            resultslist.append(
-                '<li><a href="pastes/' + id + '">'
-                    + (title ? title : '')
-                    + (author ? ' by ' + author : '')
-                    + (title || author ? ' on ' : '')
-                    + time
-                    + '</a> (<a href=edit/' + id + '>edit</a>)</li>'
-            )
+            resultslist.append(Common.format_result(id, title, author, time, true))
         }
     }
 

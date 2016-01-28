@@ -10,8 +10,6 @@
 
 
 {% block contents %}
-
-
 <form method="post" action="" id="pasteform">
   <label>Title <input type="text"
                       name="title"
@@ -26,5 +24,4 @@
   <textarea name="body" id="textbody">{{ body if body else '' }}</textarea>
   <input type="submit" value="Create Glue" id="submitform" />
 </form>
-
 {% endblock %}

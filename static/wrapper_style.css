@@ -41,9 +41,17 @@ a:hover {
 
 textarea, input {
     background-color: #cbcce7;
-    font-family: Georgia;
     font-size: 18px;
     border-color: #545570;
+}
+
+
+textarea {
+    font-family: Courier
+}
+
+input {
+    font-family: Georgia;
 }
 
 input[type=submit] {
