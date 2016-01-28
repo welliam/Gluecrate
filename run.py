@@ -42,8 +42,6 @@ Paste = namedtuple('Paste', 'id title author inserted_at body')
 
 
 def read_paste(id):
-    if id not in os.listdir('pastes'):
-        return False
     with open(format_paste_filename(id)) as f:
         body = f.read()
 
@@ -105,15 +103,15 @@ def do_search(title, author, pastes):
 
 @app.route('/pastes/<id>')
 def paste_page(id):
-    paste = read_paste(id)
-    if paste.body != "" and not paste.body:
-        return 'paste not found!'
-    else:
+    try:
+        paste = read_paste(id)
         return render_template('paste.html',
                                title=paste.title,
                                author=paste.author,
                                time=format_time(paste.inserted_at),
                                body=paste.body)
+    except IOError:
+        return render_template('paste_not_found.html')
 
 
 if __name__ == '__main__':

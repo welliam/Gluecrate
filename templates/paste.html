@@ -1,5 +1,7 @@
 {% extends "wrapper.html" %}
 
+{% block title %} {{ super() + ('- ' + title if title else '') }} {% endblock %}
+
 {% block style %}
 {{ super() }}
 
