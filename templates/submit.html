@@ -10,6 +10,16 @@
 
 
 {% block contents %}
+<div id="spiel">
+  A pastebin with features like:
+  <ul>
+    <li>editing previous pastes</li>
+    <li>viewing trees of paste edits</li>
+    <li>searching pastes by title or author</li>
+  </ul>
+  <strong>Note:</strong> All pastes are public and searchable.
+</div>
+
 <form method="post" action="" id="pasteform">
   <label>Title <input type="text"
                       name="title"
@@ -24,4 +34,5 @@
   <textarea name="body" id="textbody">{{ body if body else '' }}</textarea>
   <input type="submit" value="Create Glue" id="submitform" />
 </form>
+
 {% endblock %}

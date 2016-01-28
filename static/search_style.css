@@ -1,4 +1,4 @@
-label {
+label, input[type="submit"] {
     display: block;
     margin: 1%;
 }
