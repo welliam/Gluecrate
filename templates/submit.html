@@ -13,9 +13,17 @@
 
 
 <form method="post" action="" id="pasteform">
-  <label>Title <input type="text" name="title" autofocus /></label>
-  <label>Author <input type="text" name="author" /></label>
-  <textarea name="body" id="textbody"></textarea>
+  <label>Title <input type="text"
+                      name="title"
+                      value="{{ title if title else '' }}"
+                      autofocus /></label>
+
+  <label>Author <input type="text"
+                       name="author"
+                       value="{{ author if author else '' }}" />
+  </label>
+
+  <textarea name="body" id="textbody">{{ body if body else '' }}</textarea>
   <input type="submit" value="Create Glue" id="submitform" />
 </form>
 

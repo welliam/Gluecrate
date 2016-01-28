@@ -61,13 +61,31 @@ def format_time(s):
     return time.strftime('%x %X', time.localtime(s))
 
 
-@app.route('/', methods=['GET', 'POST'])
-def home_page():
+def submit_page(edit=None):
     if request.method == 'POST':
         title, author, body = lookup_forms('title', 'author', 'body')
         return redirect('/pastes/' + write_paste(title, author, body))
     else:
-        return render_template('submit.html')
+        paste = None
+        if edit:
+            try:
+                paste = read_paste(edit)
+            except IOError:
+                pass
+        return render_template('submit.html',
+                               title=paste and paste.title,
+                               author=paste and paste.author,
+                               body=paste and paste.body)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def home_page():
+    return submit_page()
+
+
+@app.route('/edit/<id>')
+def edit_paste(id):
+    return submit_page(id)
 
 
 @app.route('/search')
@@ -108,7 +126,8 @@ def paste_page(id):
                                title=paste.title,
                                author=paste.author,
                                time=format_time(paste.inserted_at),
-                               body=paste.body)
+                               body=paste.body,
+                               id=id)
     except IOError:
         return render_template('paste_not_found.html')
 

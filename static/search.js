@@ -12,14 +12,15 @@
             var title = process_metadatum(e['title']),
                 author = process_metadatum(e['author']),
                 time = e['inserted_at']
+                id = e['id']
 
             resultslist.append(
-                '<li><a href="pastes/' + e['id'] + '">'
+                '<li><a href="pastes/' + id + '">'
                     + (title ? title : '')
                     + (author ? ' by ' + author : '')
                     + (title || author ? ' on ' : '')
                     + time
-                    + '</a></li>'
+                    + '</a> (<a href=edit/' + id + '>edit</a>)</li>'
             )
         }
     }

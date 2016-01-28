@@ -15,12 +15,12 @@ body {
     padding: 1%;
 }
 
-#banner > h1 {
+#banner h1 {
     display: inline;
     margin: 0 10%;
 }
 
-a {
+#banner a {
     color: white;
     text-decoration: none;
     margin-right: 2%

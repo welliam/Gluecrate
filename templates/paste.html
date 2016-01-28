@@ -11,6 +11,11 @@
       />
 {% endblock %}
 
+{% block banner %}
+{{ super() }}
+<a href="/edit/{{ id }}">Edit</a>
+{% endblock %}
+
 {% block contents %}
 {% if title %}
 <h1>{{ title }}</h1>
