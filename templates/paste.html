@@ -25,6 +25,10 @@
 <h2>{{ author }}</h2>
 {% endif %}
 
+{% if edited_from %}
+<div id="edited_from">edited from <a href="{{ edited_from }}">this</a> on</div>
+{% endif %}
+
 {{ time }}
 
 <div id="body">

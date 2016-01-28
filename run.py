@@ -38,19 +38,20 @@ def write_paste(title, author, body, edit_id):
     return id
 
 
-Paste = namedtuple('Paste', 'id title author inserted_at body')
+Paste = namedtuple('Paste', 'id title author inserted_at body edited_from')
 
 
 def read_paste(id):
     with open(format_paste_filename(id)) as f:
         body = unicode(f.read(), 'utf-8')
 
-    title, author, inserted_at = get_db().cursor().execute(
-        'select title, author, inserted_at from pastes where id = ?',
-        (id,)).fetchone()
+    title, author, inserted_at, edited_from = get_db().cursor().execute(
+        '''
+        select title, author, inserted_at, edited_from from pastes where id = ?
+        ''', (id,)).fetchone()
 
-    return Paste(id=id, title=title,
-                 author=author, inserted_at=inserted_at, body=body)
+    return Paste(id=id, title=title, author=author, inserted_at=inserted_at,
+                 edited_from=edited_from, body=body)
 
 
 def lookup_forms(*names):
@@ -126,6 +127,7 @@ def paste_page(id):
                                title=paste.title,
                                author=paste.author,
                                time=format_time(paste.inserted_at),
+                               edited_from=paste.edited_from,
                                body=paste.body,
                                id=id)
     except IOError:
