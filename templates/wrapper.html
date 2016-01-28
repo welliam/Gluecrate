@@ -3,11 +3,17 @@
 <html>
   <head>
     <title>{% block title %} Gluecrate {% endblock %}</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon"
+          />
+
     {% block style %}
     <link rel="stylesheet"
           type="text/css"
           href="{{ url_for('static', filename='wrapper_style.css') }}"
           />
+
     {% endblock %}
     {% block scripts %}
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
