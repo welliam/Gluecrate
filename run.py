@@ -24,13 +24,13 @@ def format_paste_filename(id):
     return os.path.join(app.root_path, 'pastes', id)
 
 
-def write_paste(title, author, body):
+def write_paste(title, author, body, edit_id):
     conn = get_db()
     c = conn.cursor()
 
-    c.execute('''insert into pastes(title, author, inserted_at)
-    values (?, ?, ?); ''',
-              (title, author, int(time.time())))
+    c.execute('''insert into pastes(title, author, inserted_at, edited_from)
+    values (?, ?, ?, ?); ''',
+              (title, author, int(time.time()), edit_id))
     id = str(c.execute('select last_insert_rowid() from pastes').fetchone()[0])
     conn.commit()
     with open(format_paste_filename(id), 'w') as f:
@@ -61,15 +61,15 @@ def format_time(s):
     return time.strftime('%x %X', time.localtime(s))
 
 
-def submit_page(edit=None):
+def submit_page(edit_id=None):
     if request.method == 'POST':
         title, author, body = lookup_forms('title', 'author', 'body')
-        return redirect('/pastes/' + write_paste(title, author, body))
+        return redirect('/pastes/' + write_paste(title, author, body, edit_id))
     else:
         paste = None
-        if edit:
+        if edit_id:
             try:
-                paste = read_paste(edit)
+                paste = read_paste(edit_id)
             except IOError:
                 pass
         return render_template('submit.html',
@@ -83,7 +83,7 @@ def home_page():
     return submit_page()
 
 
-@app.route('/edit/<id>')
+@app.route('/edit/<id>', methods=['GET', 'POST'])
 def edit_paste(id):
     return submit_page(id)
 
