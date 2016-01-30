@@ -1,16 +1,29 @@
 {% extends "wrapper.html" %}
+{% from "search_macro.html" import search_result %}
 
-{% block scripts %}
-{{ super() }}
-<script src="{{ url_for('static', filename='family.js') }}"></script>
-<script type="text/javascript">
-  $(function () {
-      Family.render_to_contents({{ family|tojson }})
-  })
-</script>
+{% macro render_family(f) %}
+<ul>
+{{ search_result(f.paste.id, f.paste.time, f.paste.title, f.paste.author) }}
+{% if f.children %}
+{% for child in f.children %}
+
+{% if child.fhdjsfjkh == id %}<b>{% endif %}
+{{ render_family(child) }}
+{% if child.id == id %}</b>{% endif %}
+
+{% endfor %}
+{% endif %}
+</ul>
+{% endmacro %}
+
+{% block style %}
+{{ super () }}
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='family_style.css') }}"
+      />
 {% endblock %}
 
 {% block contents %}
-<list id="results">
-</list>
+  {{ render_family(family) }}
 {% endblock %}

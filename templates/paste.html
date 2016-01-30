@@ -14,7 +14,11 @@
 {% block banner %}
 {{ super() }}
 <a href="/edit/{{ id }}">Edit</a>
+
+{% if family %}
 <a href="/family/{{ id }}">Family</a>
+{% endif %}
+
 {% endblock %}
 
 {% block contents %}

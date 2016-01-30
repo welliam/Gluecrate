@@ -1,0 +1,10 @@
+{% macro search_result(id, time, title=None, author=None, family=False) %}
+<li>
+  <a href="/pastes/{{ id }}">{% if title %}{{ title }}{% endif %}
+    {% if author %}by {{ author }}{% endif %}
+    {% if title or author %} on {% endif %}
+    {{ time }}</a>
+  (<a href="/edit/{{ id }}">edit</a>{% if family %},
+  <a href="/family/{{ id }}">family</a>{% endif %})
+</li>
+{% endmacro %}

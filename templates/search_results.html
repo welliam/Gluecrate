@@ -1,0 +1,5 @@
+{% from "search_macro.html" import search_result %}
+
+{% for id, time, title, author, family in search_results %}
+{{ search_result(id, time, title=title, author=author, family=family) }}
+{% endfor %}

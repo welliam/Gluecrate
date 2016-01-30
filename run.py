@@ -41,11 +41,6 @@ def write_paste(title, author, body, edit_id):
 Paste = namedtuple('Paste', 'id title author inserted_at body edited_from')
 
 
-def sorted_pastes(pastes):
-    return sorted(lambda a, b: -1 if a.id < b.id else 0 if a.id == b.id else 1,
-                  pastes)
-
-
 def read_paste(id, read_body=True):
     body = None
     if read_body:
@@ -64,6 +59,19 @@ def read_paste(id, read_body=True):
 def read_all_pastes(read_body=False):
     return (read_paste(int(id), read_body=read_body)
             for id in os.listdir('pastes'))
+
+
+def to_paste(t):
+    id, title, author, inserted_at, edited_from = t
+    return Paste(id=id, title=title, author=author, inserted_at=inserted_at,
+                 edited_from=edited_from, body=None)
+
+
+def get_pastes_metadata():
+    data = get_db().cursor().execute(
+        'select id, title, author, inserted_at, edited_from from pastes'
+    ).fetchall()
+    return list(map(to_paste, data))
 
 
 def lookup_forms(*names):
@@ -111,61 +119,47 @@ def search_page():
 def search():
     title = request.args.get('title', '')
     author = request.args.get('author', '')
+    pastes = get_pastes_metadata()
+    results = map(lambda p: (p.id,
+                             format_time(p.inserted_at),
+                             p.title,
+                             p.author,
+                             member_of_family(p, pastes)),
+                  find_matches(title, author, pastes))
+    return render_template("search_results.html", search_results=results)
 
-    pastes = get_db().cursor().execute(
-        'select id, title, author, inserted_at from pastes'
-    ).fetchall()
-    return jsonify(dict(matches=list(do_search(title, author, pastes))))
+
+def member_of_family(p, pastes=None):
+    pastes = pastes or get_pastes_metadata()
+    return p.edited_from or any(map(lambda p2: p2.edited_from == p.id, pastes))
 
 
-def do_search(title, author, pastes):
+def find_matches(title, author, pastes):
     everything = not author and not title
     for p in pastes:
         tmatch = title and p[1] == title
         amatch = author and p[2] == author
-        if tmatch or amatch or everything:
-            yield dict(
-                id=p[0],
-                title=p[1],
-                author=p[2],
-                inserted_at=format_time(p[3])
-            )
+        if everything or tmatch or amatch:
+            yield p
 
 
 @app.route('/pastes/<id>')
 def paste_page(id):
     try:
-        paste = read_paste(id)
+        paste = read_paste(int(id))
         return render_template('paste.html',
                                title=paste.title,
                                author=paste.author,
                                time=format_time(paste.inserted_at),
                                edited_from=paste.edited_from,
                                body=paste.body,
-                               id=id)
-    except IOError:
+                               id=id,
+                               family=member_of_family(paste))
+    except (IOError, ValueError):
         return render_template('paste_not_found.html')
 
 
 Family = namedtuple('Family', 'paste children')
-
-
-def familyToDict(f):
-    return dict(
-        paste=pasteToDict(f.paste),
-        children=map(familyToDict, f.children)
-    )
-
-
-def pasteToDict(p):
-    return dict(
-        id=p.id,
-        title=p.title,
-        author=p.author,
-        inserted_at=p.inserted_at,
-        body=p.body,
-        edited_from=p.edited_from
-    )
 
 
 @app.route('/family/<id>')
@@ -174,12 +168,13 @@ def family(id):
         id = int(id)
     except (ValueError, IOError):
         return render_template('paste_not_found.html')
-    family = find_family(list(read_all_pastes()), id)
-    return render_template('family.html', family=familyToDict(family))
+    family = find_family(get_pastes_metadata(), id)
+    return render_template('family.html', family=family, id=id)
 
 
 def find_family(glues_list, id):
-    # optimize me? this is weird
+    # we can't use the id as an index to glues_list because deleted
+    # pastes might happen
     glues = {p.id: p for p in glues_list}
     og = id  # OG stands for Original Glue
     while glues[og].edited_from:

@@ -68,3 +68,7 @@ textarea {
     border-style: solid;
     padding: 1%;
 }
+
+.bold {
+    font-weight: bold;
+}
