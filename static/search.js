@@ -3,7 +3,6 @@
         $(formid).submit(function (event) {
             $.get('/_do_search', get_data(), function (data) {
                 $("#results").html(data)
-                // document.getElementById("results").innerHTML = data
             })
             event.preventDefault()
         })
