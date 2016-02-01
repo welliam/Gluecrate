@@ -1,6 +1,5 @@
 body {
     font: 17px / 1 Helvetica;
-    margin-top: 10%;
     background-color: #cbcce7;
 }
 
@@ -29,7 +28,10 @@ a:hover {
 }
 
 #contents {
-    margin: 0 5%;
+    max-width: 50em;
+    margin: 10%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #banner a {
