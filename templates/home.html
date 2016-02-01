@@ -1,0 +1,25 @@
+{% extends "edit.html" %}
+
+{% block style %}
+{{ super() }}
+<link rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='home_style.css') }}"
+      />
+{% endblock %}
+
+
+{% block contents %}
+<div id="spiel">
+  A pastebin with:
+  <ul>
+    <li>editing previous pastes</li>
+    <li>viewing trees of paste edits</li>
+    <li>searching pastes by title or author</li>
+  </ul>
+  <strong>Note:</strong> All pastes are public and searchable.
+</div>
+
+{{ super () }}
+
+{% endblock %}

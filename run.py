@@ -87,13 +87,13 @@ def submit_page(edit_id=None):
     elif edit_id:
         try:
             paste = read_paste(edit_id)
-            return render_template('submit.html',
+            return render_template('edit.html',
                                    title=paste.title,
                                    author=paste.author,
                                    body=paste.body)
         except IOError:
             pass
-    return render_template('submit.html')
+    return render_template('home.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
