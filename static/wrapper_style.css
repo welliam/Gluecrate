@@ -25,9 +25,10 @@ a:hover {
     top: 0;
     left: 0;
     width: 100%;
+    max-height: 100px;
     background-color: #545570;
     color: white;
-    padding: 1%;
+    padding: 10px;
 }
 
 #banner h1 {
@@ -37,7 +38,8 @@ a:hover {
 
 #contents {
     max-width: 50em;
-    margin: 10%;
+    margin: 100px;
+    margin-right: auto;
 }
 
 #banner a {
