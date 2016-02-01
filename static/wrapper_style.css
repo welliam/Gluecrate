@@ -1,5 +1,5 @@
 body {
-    font-family: Georgia;
+    font: 17px / 1 Helvetica;
     margin-top: 10%;
     background-color: #cbcce7;
 }
@@ -17,26 +17,25 @@ a:hover {
     position: fixed;
     top: 0;
     left: 0;
-    width: 99%;
+    width: 100%;
     background-color: #545570;
-
     color: white;
     padding: 1%;
 }
 
 #banner h1 {
     display: inline;
-    margin: 0 10%;
+    margin: 0 5%;
+}
+
+#contents {
+    margin: 0 5%;
 }
 
 #banner a {
     color: white;
     text-decoration: none;
     margin-right: 2%
-}
-
-#contents {
-    margin: 0 5%;
 }
 
 textarea, input {
@@ -46,12 +45,8 @@ textarea, input {
 }
 
 
-textarea {
+.pastetext {
     font-family: Courier
-}
-
-input {
-    font-family: Georgia;
 }
 
 input[type=submit] {
