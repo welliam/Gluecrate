@@ -3,6 +3,14 @@ body {
     background-color: #cbcce7;
 }
 
+::selection {
+    background: #ffffff;
+}
+
+::-moz-selection {
+    background: #ffffff;
+}
+
 a {
     color: black;
     text-decoration: underline;
@@ -30,8 +38,6 @@ a:hover {
 #contents {
     max-width: 50em;
     margin: 10%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #banner a {

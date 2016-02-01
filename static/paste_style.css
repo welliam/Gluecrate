@@ -1,5 +1,6 @@
 #body {
     margin: 5%;
+    white-space: pre;
 }
 
 #edited_from {
