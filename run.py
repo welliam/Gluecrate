@@ -46,14 +46,11 @@ def read_paste(id, read_body=True):
     if read_body:
         with open(format_paste_filename(id)) as f:
             body = unicode(f.read(), 'utf-8')
-
-    title, author, inserted_at, edited_from = get_db().cursor().execute(
-        '''
-        select title, author, inserted_at, edited_from from pastes where id = ?
+    t = get_db().cursor().execute(
+        '''select id, title, author, inserted_at, edited_from from pastes
+        where id = ?
         ''', (id,)).fetchone()
-
-    return Paste(id=id, title=title, author=author, inserted_at=inserted_at,
-                 edited_from=edited_from, body=body)
+    return to_paste(t, body)
 
 
 def read_all_pastes(read_body=False):
@@ -61,10 +58,10 @@ def read_all_pastes(read_body=False):
             for id in os.listdir('pastes'))
 
 
-def to_paste(t):
+def to_paste(t, body=None):
     id, title, author, inserted_at, edited_from = t
     return Paste(id=id, title=title, author=author, inserted_at=inserted_at,
-                 edited_from=edited_from, body=None)
+                 edited_from=edited_from, body=body)
 
 
 def get_pastes_metadata():
@@ -87,17 +84,16 @@ def submit_page(edit_id=None):
         title, author, body = lookup_forms('title', 'author', 'body')
         return redirect('/pastes/' +
                         str(write_paste(title, author, body, edit_id)))
-    else:
-        paste = None
-        if edit_id:
-            try:
-                paste = read_paste(edit_id)
-            except IOError:
-                pass
-        return render_template('submit.html',
-                               title=paste and paste.title,
-                               author=paste and paste.author,
-                               body=paste and paste.body)
+    elif edit_id:
+        try:
+            paste = read_paste(edit_id)
+            return render_template('submit.html',
+                                   title=paste.title,
+                                   author=paste.author,
+                                   body=paste.body)
+        except IOError:
+            pass
+    return render_template('submit.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -166,25 +162,28 @@ Family = namedtuple('Family', 'paste children')
 def family(id):
     try:
         id = int(id)
-    except (ValueError, IOError):
+    except ValueError:
         return render_template('paste_not_found.html')
     family = find_family(get_pastes_metadata(), id)
-    return render_template('family.html', family=family, id=id)
+    p = read_paste(id, False)
+    return render_template('family.html', family=family,
+                           title=p.title, id=p.id,
+                           time=format_time(p.inserted_at))
 
 
-def find_family(glues_list, id):
+def find_family(pastes_list, id):
     # we can't use the id as an index to glues_list because deleted
     # pastes might happen
-    glues = {p.id: p for p in glues_list}
-    og = id  # OG stands for Original Glue
-    while glues[og].edited_from:
-        og = glues[id].edited_from
+    pastes = {p.id: p for p in pastes_list}
+    while pastes[id].edited_from:
+        id = pastes[id].edited_from
 
     def recur(id):
-        return Family(glues[id],
-                      (recur(p.id) for p in glues_list
-                       if p.edited_from == id))
-    return recur(og)
+        paste = pastes[id]
+        return Family(
+            paste._replace(inserted_at=format_time(paste.inserted_at)),
+            (recur(p.id) for p in pastes_list if p.edited_from == id))
+    return recur(id)
 
 
 if __name__ == '__main__':

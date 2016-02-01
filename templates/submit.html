@@ -31,7 +31,9 @@
                        value="{{ author if author else '' }}" />
   </label>
 
-  <textarea name="body" id="textbody">{{ body if body else '' }}</textarea>
+  <textarea name="body" id="textbody" class="pastetext">
+    {{ body if body else '' }}
+  </textarea>
   <input type="submit" value="Create Glue" id="submitform" />
 </form>
 

@@ -3,13 +3,12 @@
 
 {% macro render_family(f) %}
 <ul>
-{{ search_result(f.paste.id, f.paste.time, f.paste.title, f.paste.author) }}
+  {{ search_result(f.paste.id, f.paste.inserted_at,
+                   title=f.paste.title, author=f.paste.author) }}
 {% if f.children %}
 {% for child in f.children %}
 
-{% if child.fhdjsfjkh == id %}<b>{% endif %}
 {{ render_family(child) }}
-{% if child.id == id %}</b>{% endif %}
 
 {% endfor %}
 {% endif %}
@@ -25,5 +24,12 @@
 {% endblock %}
 
 {% block contents %}
-  {{ render_family(family) }}
+<h2>Family for
+  <a href="/pastes/{{ id }}">
+    {% if title %}{{ title }}
+    {% else %}paste on {{ time }}
+    {% endif %}
+  </a>
+</h2>
+{{ render_family(family) }}
 {% endblock %}
