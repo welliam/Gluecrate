@@ -106,6 +106,11 @@ def edit_paste(id):
     return submit_page(id)
 
 
+@app.route('/new')
+def new_page():
+    return render_template('edit.html')
+
+
 @app.route('/search')
 def search_page():
     return render_template('search.html')
