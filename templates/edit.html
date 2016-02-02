@@ -13,10 +13,12 @@
   <label>Title <input type="text"
                       name="title"
                       value="{{ title if title else '' }}"
+                      maxlength="100"
                       autofocus /></label>
 
   <label>Author <input type="text"
                        name="author"
+                      maxlength="100"
                        value="{{ author if author else '' }}" />
   </label>
 
