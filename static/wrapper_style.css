@@ -57,7 +57,8 @@ textarea, input {
 
 
 .pastetext {
-    font-family: Courier
+    margin: 5%;
+    white-space: pre;
 }
 
 input[type=submit] {
