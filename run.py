@@ -120,12 +120,12 @@ def home_page():
 
 @app.route('/edit/<id>', methods=['GET', 'POST'])
 def edit_paste(id):
-    return submit_page(id)
+    return submit_page(page='edit.html', edit_id=id)
 
 
 @app.route('/new', methods=['GET', 'POST'])
 def new_page():
-    return submit_page('edit.html')
+    return submit_page(page='edit.html')
 
 
 @app.route('/search')
