@@ -165,8 +165,8 @@ def find_matches(title, author, pastes):
     """
     everything = not author and not title
     for p in pastes:
-        tmatch = title and p[1] == title
-        amatch = author and p[2] == author
+        tmatch = title and p.title == title
+        amatch = author and p.author == author
         if everything or tmatch or amatch:
             yield p
 
