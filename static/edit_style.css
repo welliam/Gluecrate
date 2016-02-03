@@ -1,13 +1,21 @@
-#pasteform {
-    width: 50%;
-}
-
 #pasteform > * {
     margin: 1%;
 }
 
-label {
+.input {
     display: block;
+}
+
+.input label {
+    float: left;
+}
+
+.input input {
+    float: right;
+}
+
+span {
+    clear: both;
 }
 
 #textbody {

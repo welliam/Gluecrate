@@ -19,8 +19,18 @@
 
 {% block contents %}
 <form id="searchform">
-  <label>Title <input type="text" id="title" name="title" autofocus /></label>
-  <label>Author <input type="text" id="author" name="author" /></label>
+  <table>
+    <tr>
+      <td><label for="title">Title</label></td>
+      <td><input type="text" id="title" name="title" autofocus /></td>
+    </tr>
+
+    <tr>
+      <td><label for="author">Author</label></td>
+      <td><input type="text" id="author" name="author" /></td>
+    </tr>
+  </table>
+
   <input type="submit" id="searchbutton" value="Search" />
   (Leave fields blank to see all)
 </form>

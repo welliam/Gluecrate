@@ -38,7 +38,8 @@ a:hover {
 
 #contents {
     max-width: 50em;
-    margin: 100px;
+    margin-top: 75px;
+    margin-left: 100px;
     margin-right: auto;
 }
 
@@ -50,7 +51,7 @@ a:hover {
 
 textarea, input {
     background-color: #cbcce7;
-    font-size: 18px;
+    font-size: 16px;
     border-color: #545570;
 }
 

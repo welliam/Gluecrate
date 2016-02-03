@@ -10,17 +10,28 @@
 
 {% block contents %}
 <form method="post" action="" id="pasteform">
-  <label>Title <input type="text"
-                      name="title"
-                      value="{{ title if title else '' }}"
-                      maxlength="100"
-                      autofocus /></label>
+  <table>
+    <tr>
+      <td><label for="title">Title</label></td>
+      <td><input type="text"
+             id="title"
+             name="title"
+             value="{{ title if title else '' }}"
+             maxlength="100"
+             autofocus />
+        </td>
+    </tr>
 
-  <label>Author <input type="text"
-                       name="author"
-                      maxlength="100"
-                       value="{{ author if author else '' }}" />
-  </label>
+    <tr>
+      <td><label for="author">Author</label></td>
+      <td><input type="text"
+             name="author"
+             id="author"
+             maxlength="100"
+             value="{{ author if author else '' }}" />
+      </td>
+    </tr>
+  </table>
 
   <textarea name="body" id="textbody" class="pastetext">{{ body }}</textarea>
   <input type="submit" value="Create Glue" id="submitform" />
