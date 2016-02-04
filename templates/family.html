@@ -24,12 +24,6 @@
 {% endblock %}
 
 {% block contents %}
-<h2>Family for
-  <a href="/pastes/{{ id }}">
-    {% if title %}{{ title }}
-    {% else %}paste on {{ time }}
-    {% endif %}
-  </a>
-</h2>
+<h2>Family for <a href="/pastes/{{ id }}">{{ title }}</a></h2>
 {{ render_family(family) }}
 {% endblock %}

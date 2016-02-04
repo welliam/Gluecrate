@@ -204,9 +204,9 @@ def family(id):
         return render_template('paste_not_found.html')
     family = find_family(get_pastes_metadata(), id)
     p = read_paste(id, False)
-    return render_template('family.html', family=family,
-                           title=p.title, id=p.id,
-                           time=format_time(p.inserted_at))
+    title = p.title if p.title else format_time(p.inserted_at)
+    return render_template('family.html', family=family, title=title, id=p.id)
+
 
 def find_family(pastes_list, id):
     """ Returns the family of the oldest ancestor of paste id from pastes_list
