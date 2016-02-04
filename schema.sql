@@ -7,7 +7,3 @@ create table pastes (
     inserted_at integer not null,
     edited_from integer
 );
-
-/* i did
- * alter table pastes add column edited_from integer
- */
